@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://business-loan-calculator.larrys-world.com/sitemap.xml
