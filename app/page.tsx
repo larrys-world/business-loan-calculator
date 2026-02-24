@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import RelatedTools from '@/components/RelatedTools'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 type LoanType = 'term' | 'line-of-credit' | 'sba' | 'equipment' | 'invoice'
 
@@ -20,36 +21,36 @@ interface CalculationResult {
 }
 
 const loanTypeInfo = {
-  term: {
+  'term': {
     name: 'Term Loan',
-    description: 'Fixed amount with regular payments',
+    description: 'Fixed amount borrowed and repaid over a set period',
     typicalRate: '6-30%',
-    typicalTerm: '3-60 months',
+    typicalTerm: '3-60 months'
   },
   'line-of-credit': {
     name: 'Line of Credit',
-    description: 'Flexible borrowing up to a limit',
+    description: 'Flexible borrowing up to a set limit',
     typicalRate: '7-25%',
-    typicalTerm: '6-24 months',
+    typicalTerm: '12-24 months'
   },
-  sba: {
+  'sba': {
     name: 'SBA Loan',
-    description: 'Government-backed small business loans',
-    typicalRate: '11-13%',
-    typicalTerm: '60-300 months',
+    description: 'Government-backed loans with favorable terms',
+    typicalRate: '5-11%',
+    typicalTerm: '60-300 months'
   },
-  equipment: {
+  'equipment': {
     name: 'Equipment Financing',
-    description: 'Loans specifically for equipment purchases',
-    typicalRate: '8-20%',
-    typicalTerm: '24-84 months',
+    description: 'Loans specifically for purchasing equipment',
+    typicalRate: '4-20%',
+    typicalTerm: '24-84 months'
   },
-  invoice: {
-    name: 'Invoice Factoring',
-    description: 'Advance on outstanding invoices',
+  'invoice': {
+    name: 'Invoice Financing',
+    description: 'Borrow against outstanding invoices',
     typicalRate: '10-60%',
-    typicalTerm: '1-3 months',
-  },
+    typicalTerm: '1-3 months'
+  }
 }
 
 export default function BusinessLoanCalculator() {
@@ -57,9 +58,9 @@ export default function BusinessLoanCalculator() {
     amount: 50000,
     rate: 10,
     term: 24,
-    type: 'term',
+    type: 'term'
   })
-
+  
   const [result, setResult] = useState<CalculationResult | null>(null)
 
   const calculateLoan = () => {
@@ -68,28 +69,25 @@ export default function BusinessLoanCalculator() {
     const numPayments = loanDetails.term
 
     // Calculate monthly payment using amortization formula
-    const monthlyPayment = 
-      (principal * monthlyRate * Math.pow(1 + monthlyRate, numPayments)) /
-      (Math.pow(1 + monthlyRate, numPayments) - 1)
-
+    const monthlyPayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
+                          (Math.pow(1 + monthlyRate, numPayments) - 1)
+    
     const totalPayment = monthlyPayment * numPayments
     const totalInterest = totalPayment - principal
-
-    // Calculate effective APR (includes compounding)
+    
+    // Calculate effective APR (accounting for compounding)
     const effectiveAPR = (Math.pow(1 + monthlyRate, 12) - 1) * 100
 
     setResult({
       monthlyPayment,
       totalPayment,
       totalInterest,
-      effectiveAPR,
+      effectiveAPR
     })
   }
 
   useEffect(() => {
-    if (loanDetails.amount > 0 && loanDetails.rate > 0 && loanDetails.term > 0) {
-      calculateLoan()
-    }
+    calculateLoan()
   }, [loanDetails])
 
   const formatCurrency = (amount: number) => {
@@ -97,7 +95,7 @@ export default function BusinessLoanCalculator() {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(amount)
   }
 
@@ -106,201 +104,182 @@ export default function BusinessLoanCalculator() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-8">Business Loan Calculator</h1>
-        
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Input Section */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-semibold mb-6">Loan Details</h2>
-            
-            {/* Loan Type */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">Loan Type</label>
-              <select
-                value={loanDetails.type}
-                onChange={(e) => setLoanDetails({...loanDetails, type: e.target.value as LoanType})}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                {Object.entries(loanTypeInfo).map(([key, info]) => (
-                  <option key={key} value={key}>{info.name}</option>
-                ))}
-              </select>
-              <p className="text-sm text-gray-600 mt-1">
-                {loanTypeInfo[loanDetails.type].description}
-              </p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <Breadcrumbs />
+      <div className="container mx-auto px-4 py-8">
+        <header className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+            Business Loan Calculator
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Calculate monthly payments, total interest, and compare different business loan options
+          </p>
+        </header>
 
-            {/* Loan Amount */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">
-                Loan Amount
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-3 text-gray-500">$</span>
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 className="text-2xl font-semibold mb-6 text-gray-800">Loan Details</h2>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Loan Type
+                </label>
+                <select
+                  value={loanDetails.type}
+                  onChange={(e) => setLoanDetails({...loanDetails, type: e.target.value as LoanType})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  {Object.entries(loanTypeInfo).map(([value, info]) => (
+                    <option key={value} value={value}>{info.name}</option>
+                  ))}
+                </select>
+                <p className="mt-2 text-sm text-gray-600">
+                  {loanTypeInfo[loanDetails.type].description}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Loan Amount
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                  <input
+                    type="number"
+                    value={loanDetails.amount}
+                    onChange={(e) => setLoanDetails({...loanDetails, amount: Number(e.target.value)})}
+                    className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    min="1000"
+                    max="5000000"
+                    step="1000"
+                  />
+                </div>
+                <p className="mt-1 text-sm text-gray-600">
+                  Typical range: $5,000 - $5,000,000
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Annual Interest Rate (%)
+                </label>
                 <input
                   type="number"
-                  value={loanDetails.amount}
-                  onChange={(e) => setLoanDetails({...loanDetails, amount: Number(e.target.value)})}
-                  className="w-full pl-8 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                  min="1000"
-                  max="5000000"
-                  step="1000"
+                  value={loanDetails.rate}
+                  onChange={(e) => setLoanDetails({...loanDetails, rate: Number(e.target.value)})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  min="0"
+                  max="100"
+                  step="0.1"
                 />
+                <p className="mt-1 text-sm text-gray-600">
+                  Typical rate for {loanTypeInfo[loanDetails.type].name}: {loanTypeInfo[loanDetails.type].typicalRate}
+                </p>
               </div>
-              <input
-                type="range"
-                value={loanDetails.amount}
-                onChange={(e) => setLoanDetails({...loanDetails, amount: Number(e.target.value)})}
-                className="w-full mt-2"
-                min="1000"
-                max="500000"
-                step="1000"
-              />
-            </div>
 
-            {/* Interest Rate */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">
-                Annual Interest Rate (%)
-              </label>
-              <input
-                type="number"
-                value={loanDetails.rate}
-                onChange={(e) => setLoanDetails({...loanDetails, rate: Number(e.target.value)})}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                min="1"
-                max="50"
-                step="0.1"
-              />
-              <p className="text-sm text-gray-600 mt-1">
-                Typical range: {loanTypeInfo[loanDetails.type].typicalRate}
-              </p>
-            </div>
-
-            {/* Loan Term */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">
-                Loan Term (months)
-              </label>
-              <input
-                type="number"
-                value={loanDetails.term}
-                onChange={(e) => setLoanDetails({...loanDetails, term: Number(e.target.value)})}
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                min="1"
-                max="360"
-              />
-              <p className="text-sm text-gray-600 mt-1">
-                Typical term: {loanTypeInfo[loanDetails.type].typicalTerm}
-              </p>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Loan Term (months)
+                </label>
+                <input
+                  type="number"
+                  value={loanDetails.term}
+                  onChange={(e) => setLoanDetails({...loanDetails, term: Number(e.target.value)})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  min="1"
+                  max="360"
+                  step="1"
+                />
+                <p className="mt-1 text-sm text-gray-600">
+                  Typical term: {loanTypeInfo[loanDetails.type].typicalTerm}
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Results Section */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-semibold mb-6">Loan Summary</h2>
-            
-            {result && (
-              <div className="space-y-4">
+          {result && (
+            <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800">Calculation Results</h2>
+              
+              <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-600">Monthly Payment</p>
+                  <h3 className="text-lg font-medium text-gray-700 mb-2">Monthly Payment</h3>
                   <p className="text-3xl font-bold text-blue-600">
                     {formatCurrency(result.monthlyPayment)}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm text-gray-600">Total Payment</p>
-                    <p className="text-xl font-semibold">
-                      {formatCurrency(result.totalPayment)}
-                    </p>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm text-gray-600">Total Interest</p>
-                    <p className="text-xl font-semibold">
-                      {formatCurrency(result.totalInterest)}
-                    </p>
-                  </div>
+                <div className="bg-green-50 rounded-lg p-4">
+                  <h3 className="text-lg font-medium text-gray-700 mb-2">Total Payment</h3>
+                  <p className="text-3xl font-bold text-green-600">
+                    {formatCurrency(result.totalPayment)}
+                  </p>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-600">Effective APR</p>
-                  <p className="text-xl font-semibold">
+                <div className="bg-yellow-50 rounded-lg p-4">
+                  <h3 className="text-lg font-medium text-gray-700 mb-2">Total Interest</h3>
+                  <p className="text-3xl font-bold text-yellow-600">
+                    {formatCurrency(result.totalInterest)}
+                  </p>
+                </div>
+
+                <div className="bg-purple-50 rounded-lg p-4">
+                  <h3 className="text-lg font-medium text-gray-700 mb-2">Effective APR</h3>
+                  <p className="text-3xl font-bold text-purple-600">
                     {formatPercent(result.effectiveAPR)}
                   </p>
                 </div>
+              </div>
 
-                {/* Cost Breakdown */}
-                <div className="mt-6">
-                  <h3 className="text-lg font-semibold mb-3">Cost Breakdown</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Principal</span>
-                      <span>{formatCurrency(loanDetails.amount)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Interest ({formatPercent(loanDetails.rate)})</span>
-                      <span>{formatCurrency(result.totalInterest)}</span>
-                    </div>
-                    <div className="border-t pt-2 flex justify-between font-semibold">
-                      <span>Total Cost</span>
-                      <span>{formatCurrency(result.totalPayment)}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Interest as % of Principal */}
-                <div className="bg-yellow-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-600">Interest as % of Principal</p>
-                  <p className="text-xl font-semibold text-yellow-700">
-                    {formatPercent((result.totalInterest / loanDetails.amount) * 100)}
-                  </p>
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                <h3 className="text-lg font-medium text-gray-700 mb-2">Loan Summary</h3>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <p>• You'll pay {formatCurrency(result.monthlyPayment)} per month for {loanDetails.term} months</p>
+                  <p>• Total interest paid over the life of the loan: {formatCurrency(result.totalInterest)}</p>
+                  <p>• That's {formatPercent((result.totalInterest / loanDetails.amount) * 100)} of the original loan amount</p>
+                  <p>• Your effective annual rate (accounting for monthly compounding) is {formatPercent(result.effectiveAPR)}</p>
                 </div>
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+          )}
 
-        {/* Educational Content */}
-        <div className="mt-12 grid md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-semibold mb-4">Understanding Business Loans</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li>• <strong>Term loans</strong> offer predictable payments and are ideal for one-time investments</li>
-              <li>• <strong>Lines of credit</strong> provide flexibility for ongoing expenses</li>
-              <li>• <strong>SBA loans</strong> have lower rates but longer approval times</li>
-              <li>• <strong>Equipment financing</strong> uses the equipment as collateral</li>
-              <li>• <strong>Invoice factoring</strong> provides quick cash but at higher rates</li>
-            </ul>
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Business Loan Tips</h2>
+            <div className="space-y-3 text-gray-600">
+              <p>• <strong>Shop around:</strong> Rates can vary significantly between lenders</p>
+              <p>• <strong>Check your credit:</strong> Better credit scores qualify for lower rates</p>
+              <p>• <strong>Consider fees:</strong> Origination fees and prepayment penalties affect total cost</p>
+              <p>• <strong>Match term to use:</strong> Short-term needs shouldn't have long-term loans</p>
+              <p>• <strong>Prepare documentation:</strong> Have financial statements and tax returns ready</p>
+            </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-semibold mb-4">Tips for Getting Approved</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li>• Maintain a credit score above 680 for best rates</li>
-              <li>• Prepare 2-3 years of financial statements</li>
-              <li>• Have a clear business plan for loan use</li>
-              <li>• Consider multiple lenders for rate comparison</li>
-              <li>• Factor in fees beyond the interest rate</li>
-            </ul>
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Understanding Business Loan Types</h2>
+            <div className="space-y-4">
+              {Object.entries(loanTypeInfo).map(([type, info]) => (
+                <div key={type} className="border-l-4 border-blue-500 pl-4">
+                  <h3 className="font-semibold text-gray-700">{info.name}</h3>
+                  <p className="text-gray-600 text-sm">{info.description}</p>
+                  <p className="text-gray-500 text-sm mt-1">
+                    Typical rates: {info.typicalRate} | Terms: {info.typicalTerm}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Related Tools Section */}
-        <div className="mt-12">
-          <RelatedTools />
-        </div>
+          <RelatedTools currentTool="business-loan-calculator" />
 
-        {/* Footer */}
-        <div className="mt-12 text-center text-sm text-gray-500">
-          <p>
-            This calculator provides estimates for educational purposes only. 
-            Actual rates and terms will vary based on creditworthiness and lender requirements.
-          </p>
+          <div className="bg-blue-50 rounded-lg p-6 text-center">
+            <p className="text-gray-700 mb-2">
+              Need help finding the right business loan?
+            </p>
+            <p className="text-sm text-gray-600">
+              Consider consulting with a financial advisor or loan broker who can help match you with appropriate lenders.
+            </p>
+          </div>
         </div>
       </div>
     </div>
