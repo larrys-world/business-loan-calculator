@@ -10,6 +10,7 @@ A comprehensive business loan calculator that helps small business owners compar
 - Educational content about business loans
 - Mobile-responsive design
 - SEO optimized
+- Analytics tracking with Plausible
 
 ## Tech Stack
 
@@ -36,3 +37,5 @@ The static site will be generated in the `out/` directory.
 ## Deployment
 
 This site is deployed to Vercel and accessible at: https://business-loan-calculator.larrys-world.com
+
+Last updated: 2026-02-23
