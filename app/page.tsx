@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import RelatedTools from '@/components/RelatedTools'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import FAQ from '@/components/FAQ'
 
 type LoanType = 'term' | 'line-of-credit' | 'sba' | 'equipment' | 'invoice'
 
@@ -269,6 +270,9 @@ export default function BusinessLoanCalculator() {
               ))}
             </div>
           </div>
+
+          {/* FAQ Section */}
+          <FAQ />
 
           <RelatedTools currentTool="business-loan-calculator" />
 

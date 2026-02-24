@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Business Loan Calculator - Compare Rates & Calculate Payments',
-  description: 'Free business loan calculator. Compare term loans, lines of credit, SBA loans. Calculate monthly payments, total interest, and find the best rates for your business.',
+  description: 'Calculate business loan payments, total interest & APR instantly. Compare multiple loans. Make smarter financing decisions. Free calculator →',
   keywords: 'business loan calculator, commercial loan calculator, small business loan calculator, SBA loan calculator, business loan payment calculator',
   openGraph: {
     title: 'Business Loan Calculator - Compare Rates & Calculate Payments',

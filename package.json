@@ -17,6 +17,7 @@
   "author": "LarryR",
   "license": "MIT",
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/postcss": "^4.2.0",
     "@types/node": "^25.3.0",
     "@types/react": "^19.2.14",
