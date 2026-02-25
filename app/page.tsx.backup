@@ -129,34 +129,7 @@ export default function BusinessLoanCalculator() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Breadcrumbs />
-      {/* Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebApplication",
-            "name": "Business Loan Calculator",
-            "description": "Calculate monthly payments, total interest, and compare different business loan options. Supports term loans, lines of credit, SBA loans, equipment financing, and invoice financing.",
-            "url": "https://larrys-world.github.io/business-loan-calculator/",
-            "applicationCategory": "FinanceApplication",
-            "operatingSystem": "Any",
-            "offers": {
-              "@type": "Offer",
-              "price": "0",
-              "priceCurrency": "USD"
-            },
-            "featureList": [
-              "Calculate monthly loan payments",
-              "Compare different loan types",
-              "View total interest costs",
-              "Calculate effective APR",
-              "Support for 5 loan types"
-            ],
-            "screenshot": "https://larrys-world.github.io/business-loan-calculator/og-image.png"
-          })
-        }}
-      />      
+      
       {/* Header Ad */}
       <HeaderAd client={ADSENSE_CLIENT} slot={ADSENSE_SLOTS.header} />
       
