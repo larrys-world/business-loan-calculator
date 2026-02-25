@@ -4,6 +4,15 @@ import { useState, useEffect } from 'react'
 import RelatedTools from '@/components/RelatedTools'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import FAQ from '@/components/FAQ'
+import { HeaderAd, FooterAd, InContentAd } from '@/components/monetization/AdSense'
+
+// AdSense configuration - replace with actual values when available
+const ADSENSE_CLIENT = 'ca-pub-XXXXXXXXXXXXXXXX'
+const ADSENSE_SLOTS = {
+  header: 'XXXXXXXXXX',
+  footer: 'XXXXXXXXXX',
+  content: 'XXXXXXXXXX'
+}
 
 type LoanType = 'term' | 'line-of-credit' | 'sba' | 'equipment' | 'invoice'
 
@@ -64,6 +73,19 @@ export default function BusinessLoanCalculator() {
   
   const [result, setResult] = useState<CalculationResult | null>(null)
 
+  // Add AdSense script
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + ADSENSE_CLIENT
+    script.async = true
+    script.crossOrigin = 'anonymous'
+    document.head.appendChild(script)
+
+    return () => {
+      document.head.removeChild(script)
+    }
+  }, [])
+
   const calculateLoan = () => {
     const principal = loanDetails.amount
     const monthlyRate = loanDetails.rate / 100 / 12
@@ -107,6 +129,10 @@ export default function BusinessLoanCalculator() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Breadcrumbs />
+      
+      {/* Header Ad */}
+      <HeaderAd client={ADSENSE_CLIENT} slot={ADSENSE_SLOTS.header} />
+      
       <div className="container mx-auto px-4 py-8">
         <header className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
@@ -245,6 +271,9 @@ export default function BusinessLoanCalculator() {
             </div>
           )}
 
+          {/* In-Content Ad */}
+          <InContentAd client={ADSENSE_CLIENT} slot={ADSENSE_SLOTS.content} />
+
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">Business Loan Tips</h2>
             <div className="space-y-3 text-gray-600">
@@ -274,7 +303,7 @@ export default function BusinessLoanCalculator() {
           {/* FAQ Section */}
           <FAQ />
 
-          <RelatedTools currentTool="business-loan-calculator" />
+          <RelatedTools />
 
           <div className="bg-blue-50 rounded-lg p-6 text-center">
             <p className="text-gray-700 mb-2">
@@ -286,6 +315,9 @@ export default function BusinessLoanCalculator() {
           </div>
         </div>
       </div>
+      
+      {/* Footer Ad */}
+      <FooterAd client={ADSENSE_CLIENT} slot={ADSENSE_SLOTS.footer} />
     </div>
   )
 }
